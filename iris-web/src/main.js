@@ -392,7 +392,7 @@ function downloadPage() {
           ${icon.arrow}
           <h3>${title}</h3>
           <p style="margin-bottom: 2rem;">${text}</p>
-          <button type="button" class="download-pill" style="width: 100%;">Download</button>
+          <a href="https://drive.google.com/file/d/1q7fimtduT3NbiCHEl3IIClqJWL5Ks0Wn/view?usp=drive_link" class="download-pill" style="width: 100%; display: block; text-align: center; text-decoration: none;" target="_blank">Download for Windows</a>
         </article>
       `).join('')}
     </section>
