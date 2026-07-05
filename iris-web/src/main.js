@@ -634,37 +634,4 @@ gsap.fromTo('.topbar', { y: -90, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration:
 gsap.fromTo('.docs-sidebar', { x: -20, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.7, ease: 'power3.out', delay: 0.15 });
 
 
-function initHackerCanvas() {
-  const canvas = document.getElementById('hacker-bg');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  let width = canvas.width = window.innerWidth;
-  let height = canvas.height = window.innerHeight;
-  const characters = 'YIGO AI SYSTEM 010101 MATRIX HACK COMMAND OVERRIDE ENCRYPT'.split('');
-  const fontSize = 14;
-  let columns = width / fontSize;
-  let drops = [];
-  for (let x = 0; x < columns; x++) { drops[x] = 1; }
-  window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-    columns = width / fontSize;
-    drops = [];
-    for (let x = 0; x < columns; x++) { drops[x] = 1; }
-  });
-  function draw() {
-    ctx.fillStyle = 'rgba(10, 10, 10, 0.08)';
-    ctx.fillRect(0, 0, width, height);
-    ctx.fillStyle = 'rgba(33, 241, 168, 0.25)';
-    ctx.font = fontSize + 'px "Orbitron"';
-    for (let i = 0; i < drops.length; i++) {
-      const text = characters[Math.floor(Math.random() * characters.length)];
-      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-      if (drops[i] * fontSize > height && Math.random() > 0.975) { drops[i] = 0; }
-      drops[i]++;
-    }
-  }
-  setInterval(draw, 35);
-}
 
-initHackerCanvas();
