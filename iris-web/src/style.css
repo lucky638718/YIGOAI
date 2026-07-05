@@ -446,9 +446,9 @@ svg {
 .intro h1 {
   margin: 1rem 0;
   max-width: 960px;
-  font-size: clamp(3.4rem, 9vw, 7.7rem);
+  font-size: clamp(2.5rem, 6vw, 5rem);
   font-weight: 950;
-  line-height: 0.9;
+  line-height: 1.05;
   letter-spacing: 0;
   text-transform: uppercase;
 }
@@ -540,9 +540,9 @@ svg {
 .join-hero h2 {
   margin: 1rem 0 1rem;
   color: #fff;
-  font-size: clamp(2.3rem, 6vw, 5.2rem);
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
   font-weight: 950;
-  line-height: 0.95;
+  line-height: 1.05;
   letter-spacing: 0;
   text-transform: uppercase;
 }
