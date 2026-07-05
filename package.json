@@ -1,0 +1,7 @@
+{
+  "name": "yigoai-root",
+  "private": true,
+  "scripts": {
+    "build": "cd iris-web && npm install && npm run build"
+  }
+}

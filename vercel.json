@@ -1,4 +1,6 @@
 {
+  "buildCommand": "npm run build",
+  "outputDirectory": "iris-web/dist",
   "rewrites": [
     {
       "source": "/(.*)",
