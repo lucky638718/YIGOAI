@@ -384,21 +384,18 @@ function joinPage() {
 
 function downloadPage() {
   return `
-    <section class="download-grid page-block" style="display: flex; justify-content: center;">
+    <section class="download-grid page-block" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; padding: 20px;">
       ${[
-        ['Desktop App', 'Windows voice assistant package with local automation service.'],
-      ].map(([title, text]) => `
-        <article class="download-card" style="width: 100%; max-width: 420px; text-align: center;">
-          ${icon.arrow}
-          <h3 style="font-family: 'Cinzel Decorative', serif;">${title}</h3>
-          <p style="margin-bottom: 2rem;">${text}</p>
-          <div style="display: flex; gap: 10px; flex-direction: column;">
-            <a href="https://drive.google.com/file/d/1k1SCBf8y229Asm1dExty47fY9Ie0ueW-/view?usp=sharing" class="download-pill" style="width: 100%; display: block; text-align: center; text-decoration: none;" target="_blank">Download for Windows (.exe)</a>
-            <a href="https://drive.google.com/file/d/1KcFQEkw4No2EtcO-49ylmLhkCpCwC9eH/view?usp=sharing" class="download-pill" style="width: 100%; display: block; text-align: center; text-decoration: none;" target="_blank">Download for Mac OS (.dmg)</a>
-            <a href="https://drive.google.com/file/d/1fqil1ymDgq3xzxZbYKapqvQuU1mk26YX/view?usp=sharing" class="download-pill" style="width: 100%; display: block; text-align: center; text-decoration: none;" target="_blank">Download for Android (.apk)</a>
-            <a href="https://drive.google.com/file/d/15H5RUXh6StEr0D645zlldPp4wPkTUPjx/view?usp=sharing" class="download-pill" style="width: 100%; display: block; text-align: center; text-decoration: none;" target="_blank">Download for iOS (.ipa)</a>
-          </div>
-          <p style="font-size: 0.8rem; color: var(--muted); margin-top: 15px; text-align: center;">Official packages hosted securely on Google Drive</p>
+        ['Windows App', 'Desktop voice assistant package with local automation service.', 'https://drive.google.com/file/d/1k1SCBf8y229Asm1dExty47fY9Ie0ueW-/view?usp=sharing', 'Download for Windows'],
+        ['Mac OS App', 'Pristine macOS client optimized for Apple Silicon and Intel chips.', 'https://drive.google.com/file/d/1KcFQEkw4No2EtcO-49ylmLhkCpCwC9eH/view?usp=sharing', 'Download for Mac OS'],
+        ['Android App', 'Mobile package designed for Android smartphones and tablets.', 'https://drive.google.com/file/d/1fqil1ymDgq3xzxZbYKapqvQuU1mk26YX/view?usp=sharing', 'Download for Android'],
+        ['iOS App', 'Custom voice client designed for iPhones and iPads.', 'https://drive.google.com/file/d/15H5RUXh6StEr0D645zlldPp4wPkTUPjx/view?usp=sharing', 'Download for iOS']
+      ].map(([title, text, link, btnText]) => `
+        <article class="download-card" style="text-align: center; padding: 30px; display: flex; flex-direction: column; height: 100%;">
+          <div style="font-size: 2rem; margin-bottom: 1rem; color: var(--green); display: flex; justify-content: center;">${icon.arrow}</div>
+          <h3 style="font-family: 'Cinzel Decorative', serif; margin-bottom: 1rem;">${title}</h3>
+          <p style="margin-bottom: 2rem; font-size: 0.9rem; color: var(--muted); flex-grow: 1;">${text}</p>
+          <a href="${link}" class="download-pill" style="width: 100%; display: block; text-align: center; text-decoration: none;" target="_blank">${btnText}</a>
         </article>
       `).join('')}
     </section>

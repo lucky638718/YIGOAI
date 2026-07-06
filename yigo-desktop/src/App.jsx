@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Camera, MonitorUp, PowerOff, LayoutDashboard, CalendarDays, Images, NotebookPen, Settings, Mic, Send, Cpu, MemoryStick, ThermometerSun, Battery, Minimize2, Maximize2, X, Lock, KeyRound, EyeOff, Zap, Power, Monitor, Search, Image as ImageIcon, Smartphone, BrainCircuit, Info } from 'lucide-react';
+import { Camera, MonitorUp, PowerOff, LayoutDashboard, CalendarDays, Images, NotebookPen, Settings, Mic, Send, Cpu, MemoryStick, ThermometerSun, Battery, Minimize2, Maximize2, X, Lock, KeyRound, EyeOff, Zap, Power, Monitor, Search, Image as ImageIcon, Smartphone, BrainCircuit, Info, Menu } from 'lucide-react';
 import Earth from './Earth';
 import Aurora from './Aurora';
 import './index.css';
@@ -100,6 +100,7 @@ export default function App() {
   const [sysPwd, setSysPwd]     = useState(null);
   const [pwdInput, setPwdInput] = useState('');
   const [settingsUnlocked, setSettingsUnlocked] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   const [tab, setTab]           = useState('DASHBOARD');
   const [aiState, setAiState]   = useState(false);
@@ -558,25 +559,39 @@ Here are your current memory/notes to remember about the user: ${JSON.stringify(
       )}
 
       {/* Titlebar */}
-      <div className="titlebar">
-        <div className="tb-drag" />
-        <div className="tb-btns">
-          <button className="tb-btn" onClick={() => win('minimize')}><Minimize2 size={14} /></button>
-          <button className="tb-btn" onClick={() => win('maximize')}><Maximize2 size={14} /></button>
-          <button className="tb-btn tb-close" onClick={() => win('close')}><X size={16} /></button>
+      {window.electronAPI ? (
+        <div className="titlebar">
+          <div className="tb-drag" />
+          <div className="tb-btns">
+            <button className="tb-btn" onClick={() => win('minimize')}><Minimize2 size={14} /></button>
+            <button className="tb-btn" onClick={() => win('maximize')}><Maximize2 size={14} /></button>
+            <button className="tb-btn tb-close" onClick={() => win('close')}><X size={16} /></button>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="mobile-header">
+          <button className="mobile-menu-btn" onClick={() => setMobileMenuOpen(true)}>
+            <Menu size={24} color="var(--green)" />
+          </button>
+          <div className="mobile-title">YIGO AI</div>
+          <div style={{ width: 24 }} /> {/* Spacer for centering */}
+        </div>
+      )}
 
       <div className="app-layout">
+        {/* Mobile Backdrop */}
+        {!window.electronAPI && mobileMenuOpen && (
+          <div className="mobile-backdrop" onClick={() => setMobileMenuOpen(false)} />
+        )}
         
         {/* SIDEBAR */}
-        <div className="sidebar">
+        <div className={`sidebar ${!window.electronAPI && mobileMenuOpen ? 'mobile-open' : ''}`}>
         <div className="sidebar-brand">
           <Logo s={90} className="mb-4" />
         </div>
           <nav className="side-nav">
             {NAV_ITEMS.map(n => (
-              <button key={n.id} className={`side-btn${tab === n.id ? ' active' : ''}`} onClick={() => setTab(n.id)}>
+              <button key={n.id} className={`side-btn${tab === n.id ? ' active' : ''}`} onClick={() => { setTab(n.id); setMobileMenuOpen(false); }}>
                 {n.icon} <span className="side-label">{n.label}</span>
               </button>
             ))}

@@ -433,3 +433,118 @@ body {
   display: flex;
 }
 .vault-delete-btn:hover { background: rgba(255,0,0,1); transform: scale(1.15); }
+
+/* ─── Mobile Responsiveness & App Feel ────────────────────────────────────── */
+.mobile-header {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .titlebar {
+    display: none !important;
+  }
+  .app-layout {
+    margin-top: 56px !important;
+    height: calc(100vh - 56px) !important;
+    flex-direction: column !important;
+  }
+  
+  .mobile-header {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    background: rgba(1, 3, 2, 0.95);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    padding: 0 16px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+  }
+  .mobile-menu-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mobile-title {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #fff;
+  }
+  
+  /* Sidebar Drawer on Mobile */
+  .sidebar {
+    position: fixed !important;
+    top: 56px !important;
+    left: -260px !important;
+    bottom: 0 !important;
+    width: 250px !important;
+    height: calc(100vh - 56px) !important;
+    z-index: 9998 !important;
+    transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 10px 0 30px rgba(0,0,0,0.8);
+  }
+  .sidebar.mobile-open {
+    left: 0 !important;
+  }
+  
+  /* Blurred Backdrop Overlay */
+  .mobile-backdrop {
+    position: fixed;
+    inset: 0;
+    top: 56px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 9997;
+    animation: fadeIn 0.25s ease-out;
+  }
+  
+  /* Stack the dashboard columns vertically and allow scroll */
+  .workspace {
+    padding: 12px !important;
+    overflow-y: auto !important;
+    height: 100% !important;
+  }
+  .dash {
+    grid-template-columns: 1fr !important;
+    height: auto !important;
+    gap: 20px !important;
+    overflow-y: visible !important;
+  }
+  .left-col, .right-col, .chat-col {
+    width: 100% !important;
+    height: auto !important;
+  }
+  .core-panel {
+    min-height: 380px !important;
+    padding: 20px 0 !important;
+  }
+  .chat-msgs {
+    max-height: 350px !important;
+  }
+  
+  /* General page margins for mobile screens */
+  .page {
+    padding: 16px !important;
+    overflow-y: auto !important;
+  }
+  
+  .grid-2 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
