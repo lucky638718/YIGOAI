@@ -1,0 +1,7 @@
+Releases/
+node_modules/
+dist/
+dist-electron/
+.DS_Store
+*.log
+YIGO-AI-Setup.exe

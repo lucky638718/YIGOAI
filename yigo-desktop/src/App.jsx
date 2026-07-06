@@ -80,8 +80,8 @@ function LockScreen({ requiredPin, onUnlock }) {
       
       <div className="lock-box">
         <Logo s={64} className="mb-4" />
-        <div style={{ fontFamily: 'var(--mono)', fontSize: 24, letterSpacing: 4, marginBottom: 24, color: '#fff' }}>YIGO <span style={{ color: 'var(--green)' }}>AI</span></div>
-        <div style={{ color: 'var(--muted)', fontSize: 10, letterSpacing: 2, marginBottom: 24, textTransform: 'uppercase' }}>Enter Security PIN</div>
+        <div style={{ fontFamily: 'var(--font-cinzel)', fontSize: 32, letterSpacing: 4, marginBottom: 24, color: '#fff', fontWeight: 'bold' }}>YIGO <span style={{ color: 'var(--green)' }}>AI</span></div>
+        <div style={{ color: 'var(--muted)', fontSize: 10, letterSpacing: 2, marginBottom: 24, textTransform: 'uppercase', fontFamily: 'var(--font-sans)' }}>Enter Security PIN</div>
         <div className="pin-dots">
           {[...Array(4)].map((_, i) => (
             <div key={i} className={`pin-dot ${i < input.length ? 'filled' : ''} ${err ? 'err' : ''}`} />
@@ -128,25 +128,30 @@ export default function App() {
   /* Init */
   useEffect(() => {
     const initApp = async () => {
+      let p, g, q, o, n, pw;
       if (window.electronAPI) {
-        const p = await window.electronAPI.getStoreVal('pin');
-        const g = await window.electronAPI.getStoreVal('gemini_key');
-        const q = await window.electronAPI.getStoreVal('groq_key');
-        const o = await window.electronAPI.getStoreVal('openai_key');
-        const n = await window.electronAPI.getStoreVal('notes') || [];
-        const pw = await window.electronAPI.getStoreVal('sysPwd');
-        
-        setApiKeys({ gemini: g || '', groq: q || '', openai: o || '' });
-        if (n.length) setNotes(n);
-        if (pw) setSysPwd(pw);
-        
-        if (p) {
-          setSysPin(p);
-          setLocked(true);
-        } else {
-          setLocked(false);
-          setBooting(true);
-        }
+        p = await window.electronAPI.getStoreVal('pin');
+        g = await window.electronAPI.getStoreVal('gemini_key');
+        q = await window.electronAPI.getStoreVal('groq_key');
+        o = await window.electronAPI.getStoreVal('openai_key');
+        n = await window.electronAPI.getStoreVal('notes') || [];
+        pw = await window.electronAPI.getStoreVal('sysPwd');
+      } else {
+        p = localStorage.getItem('pin');
+        g = localStorage.getItem('gemini_key');
+        q = localStorage.getItem('groq_key');
+        o = localStorage.getItem('openai_key');
+        try { n = JSON.parse(localStorage.getItem('notes')) || []; } catch(e) { n = []; }
+        pw = localStorage.getItem('sysPwd');
+      }
+      
+      setApiKeys({ gemini: g || '', groq: q || '', openai: o || '' });
+      if (n.length) setNotes(n);
+      if (pw) setSysPwd(pw);
+      
+      if (p) {
+        setSysPin(p);
+        setLocked(true);
       } else {
         setLocked(false);
         setBooting(true);
@@ -347,7 +352,8 @@ Here are your current memory/notes to remember about the user: ${JSON.stringify(
            if (parsed.action === 'SAVE_NOTE') {
              const newNotes = [...notes, { date: new Date().toISOString(), text: parsed.payload }];
              setNotes(newNotes);
-             window.electronAPI?.setStoreVal('notes', newNotes);
+             if (window.electronAPI) window.electronAPI.setStoreVal('notes', newNotes);
+             else localStorage.setItem('notes', JSON.stringify(newNotes));
            }
         }
       } catch (e) {
@@ -401,22 +407,31 @@ Here are your current memory/notes to remember about the user: ${JSON.stringify(
   };
 
   const saveSettings = () => {
-    window.electronAPI?.setStoreVal('gemini_key', apiKeys.gemini);
-    window.electronAPI?.setStoreVal('groq_key', apiKeys.groq);
-    window.electronAPI?.setStoreVal('openai_key', apiKeys.openai);
+    if (window.electronAPI) {
+      window.electronAPI.setStoreVal('gemini_key', apiKeys.gemini);
+      window.electronAPI.setStoreVal('groq_key', apiKeys.groq);
+      window.electronAPI.setStoreVal('openai_key', apiKeys.openai);
+    } else {
+      localStorage.setItem('gemini_key', apiKeys.gemini);
+      localStorage.setItem('groq_key', apiKeys.groq);
+      localStorage.setItem('openai_key', apiKeys.openai);
+    }
     
     if (pwdInput.trim() !== '') {
-      window.electronAPI?.setStoreVal('sysPwd', pwdInput);
       setSysPwd(pwdInput);
+      if (window.electronAPI) window.electronAPI.setStoreVal('sysPwd', pwdInput);
+      else localStorage.setItem('sysPwd', pwdInput);
       setPwdInput('');
     }
+    
     if (pinInput && pinInput.length === 4) {
       if (sysPin && currentPinVerify !== sysPin) {
         showToast("Error: Current PIN is incorrect!");
         return;
       }
-      window.electronAPI?.setStoreVal('pin', pinInput);
       setSysPin(pinInput);
+      if (window.electronAPI) window.electronAPI.setStoreVal('pin', pinInput);
+      else localStorage.setItem('pin', pinInput);
       setPinInput('');
       setCurrentPinVerify('');
       showToast("Settings and Security PIN Saved!");
@@ -820,6 +835,27 @@ Here are your current memory/notes to remember about the user: ${JSON.stringify(
                     <label style={{ fontSize: 10, color: 'var(--muted)', display: 'block', marginBottom: 6, fontFamily: 'var(--mono)', letterSpacing: 1 }}>Set New 4-Digit Lock PIN (Current: {sysPin ? '****' : 'None'})</label>
                     <input type="password" maxLength={4} value={pinInput} onChange={e => setPinInput(e.target.value.replace(/[^0-9]/g, ''))} placeholder="e.g. 1234" className="input-field" />
                   </div>
+                </div>
+              </div>
+              <div className="panel" style={{ padding: 26, marginBottom: 24, border: '1px solid rgba(231, 76, 60, 0.3)' }}>
+                <h3 style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: 2, marginBottom: 20, display: 'flex', alignItems: 'center', gap: 8, color: '#e74c3c' }}><PowerOff size={14} /> RESET FACTORY SETTINGS</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 18, maxWidth: 600 }}>
+                  <p style={{ color: 'var(--muted)', fontSize: 11 }}>If you want to clear all your saved API keys, PIN, and Notes, click the reset button below.</p>
+                  <button onClick={() => {
+                        if (confirm('Are you sure you want to completely reset the app? This will clear all data including PIN, API keys, and notes.')) {
+                          if (window.electronAPI) {
+                            window.electronAPI.setStoreVal('pin', null);
+                            window.electronAPI.setStoreVal('gemini_key', null);
+                            window.electronAPI.setStoreVal('groq_key', null);
+                            window.electronAPI.setStoreVal('openai_key', null);
+                            window.electronAPI.setStoreVal('notes', null);
+                            window.electronAPI.setStoreVal('sysPwd', null);
+                          } else {
+                            localStorage.clear();
+                          }
+                          alert('Data reset successfully. Please restart the app.');
+                        }
+                      }} style={{ background: 'rgba(231, 76, 60, 0.1)', color: '#e74c3c', padding: '10px 20px', borderRadius: 8, border: '1px solid rgba(231, 76, 60, 0.3)', fontFamily: 'var(--mono)', cursor: 'pointer', width: '200px' }}>RESET ALL DATA</button>
                 </div>
               </div>
 

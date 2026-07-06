@@ -1,0 +1,98 @@
+name: Build Apps
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-desktop:
+    name: Build Desktop Apps (Win & Mac)
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        working-directory: yigo-desktop
+        run: npm install
+
+      - name: Build Web App
+        working-directory: yigo-desktop
+        run: npm run build
+
+      - name: Package App (Windows)
+        if: matrix.os == 'windows-latest'
+        working-directory: yigo-desktop
+        run: npx electron-builder --win
+
+      - name: Package App (Mac)
+        if: matrix.os == 'macos-latest'
+        working-directory: yigo-desktop
+        run: npx electron-builder --mac
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-app-${{ matrix.os }}
+          path: yigo-desktop/dist-electron/*.exe
+          if-no-files-found: ignore
+          
+      - name: Upload Artifacts Mac
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-app-mac
+          path: yigo-desktop/dist-electron/*.dmg
+          if-no-files-found: ignore
+
+  build-android:
+    name: Build Android App
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Install Dependencies
+        working-directory: yigo-desktop
+        run: npm install
+
+      - name: Build Web App
+        working-directory: yigo-desktop
+        run: npm run build
+
+      - name: Sync Capacitor
+        working-directory: yigo-desktop
+        run: npx cap sync android
+
+      - name: Build APK
+        working-directory: yigo-desktop/android
+        run: ./gradlew assembleDebug
+
+      - name: Upload Android Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-app
+          path: yigo-desktop/android/app/build/outputs/apk/debug/*.apk

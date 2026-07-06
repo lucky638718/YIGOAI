@@ -10,6 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@capacitor/android": "^8.4.1",
+    "@capacitor/cli": "^8.4.1",
+    "@capacitor/core": "^8.4.1",
+    "@capacitor/ios": "^8.4.1",
     "@chakra-ui/react": "^3.36.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
@@ -47,6 +51,11 @@
     "productName": "YIGO AI",
     "directories": {
       "output": "dist-electron"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "public/yigo-logo-cropped.png",
+      "category": "public.app-category.productivity"
     },
     "win": {
       "target": "nsis",

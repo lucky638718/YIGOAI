@@ -390,9 +390,14 @@ function downloadPage() {
       ].map(([title, text]) => `
         <article class="download-card" style="width: 100%; max-width: 420px; text-align: center;">
           ${icon.arrow}
-          <h3>${title}</h3>
+          <h3 style="font-family: 'Cinzel Decorative', serif;">${title}</h3>
           <p style="margin-bottom: 2rem;">${text}</p>
-          <a href="https://drive.google.com/file/d/1q7fimtduT3NbiCHEl3IIClqJWL5Ks0Wn/view?usp=drive_link" class="download-pill" style="width: 100%; display: block; text-align: center; text-decoration: none;" target="_blank">Download for Windows</a>
+          <div style="display: flex; gap: 10px; flex-direction: column;">
+            <a href="https://drive.google.com/file/d/1q7fimtduT3NbiCHEl3IIClqJWL5Ks0Wn/view?usp=drive_link" class="download-pill" style="width: 100%; display: block; text-align: center; text-decoration: none;" target="_blank">Download for Windows (.exe)</a>
+            <a href="https://github.com/lucky638718/YIGOAI/actions" class="download-pill" style="width: 100%; display: block; text-align: center; text-decoration: none; background: transparent; border: 1px solid var(--green); color: var(--green);" target="_blank">Download for Mac OS (.dmg)</a>
+            <a href="https://github.com/lucky638718/YIGOAI/actions" class="download-pill" style="width: 100%; display: block; text-align: center; text-decoration: none; background: transparent; border: 1px solid var(--green); color: var(--green);" target="_blank">Download for Android (.apk)</a>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--muted); margin-top: 15px; text-align: center;">Mac & Android links point to GitHub Actions Auto-Builds</p>
         </article>
       `).join('')}
     </section>
