@@ -22,7 +22,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install Dependencies
         working-directory: yigo-desktop
@@ -67,7 +67,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Setup Java
         uses: actions/setup-java@v3
@@ -96,3 +96,45 @@ jobs:
         with:
           name: android-app
           path: yigo-desktop/android/app/build/outputs/apk/debug/*.apk
+
+  build-ios:
+    name: Build iOS App (Unsigned)
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Dependencies
+        working-directory: yigo-desktop
+        run: npm install
+
+      - name: Build Web App
+        working-directory: yigo-desktop
+        run: npm run build
+
+      - name: Sync Capacitor iOS
+        working-directory: yigo-desktop
+        run: npx cap sync ios
+
+      - name: Build Xcode Workspace
+        working-directory: yigo-desktop/ios/App
+        run: |
+          xcodebuild -workspace App.xcworkspace -scheme App -sdk iphoneos -configuration Debug -derivedDataPath build CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO clean build
+
+      - name: Package IPA
+        working-directory: yigo-desktop/ios/App
+        run: |
+          mkdir -p Payload
+          cp -r build/Build/Products/Debug-iphoneos/App.app Payload/
+          zip -r App.ipa Payload
+
+      - name: Upload iOS Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-app
+          path: yigo-desktop/ios/App/App.ipa
