@@ -49,6 +49,16 @@ function DisplayFeed() {
 function LockScreen({ requiredPin, onUnlock }) {
   const [input, setInput] = useState('');
   const [err, setErr] = useState(false);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+    const handleScreenClick = () => {
+      inputRef.current?.focus();
+    };
+    window.addEventListener('click', handleScreenClick);
+    return () => window.removeEventListener('click', handleScreenClick);
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -68,7 +78,7 @@ function LockScreen({ requiredPin, onUnlock }) {
       if (input === requiredPin) onUnlock();
       else {
         setErr(true);
-        setTimeout(() => { setInput(''); setErr(false); }, 1000);
+        setTimeout(() => { setInput(''); setErr(false); inputRef.current?.focus(); }, 1000);
       }
     }
   }, [input, requiredPin, onUnlock]);
@@ -78,13 +88,32 @@ function LockScreen({ requiredPin, onUnlock }) {
       <div className="bg-layer" style={{ backgroundImage: 'url(/bg.jpg)' }} />
       <div className="aurora-wrap"><Aurora colorStops={['#000', '#0a1a14', '#000']} speed={0.3} /></div>
       
+      <input
+        ref={inputRef}
+        type="text"
+        pattern="[0-9]*"
+        inputMode="numeric"
+        value={input}
+        onChange={(e) => {
+          const val = e.target.value.replace(/[^0-9]/g, '').slice(0, 4);
+          setInput(val);
+        }}
+        style={{
+          position: 'absolute',
+          opacity: 0,
+          pointerEvents: 'none',
+          width: 0,
+          height: 0,
+        }}
+      />
+
       <div className="lock-box">
         <Logo s={64} className="mb-4" />
         <div style={{ fontFamily: 'var(--font-cinzel)', fontSize: 32, letterSpacing: 4, marginBottom: 24, color: '#fff', fontWeight: 'bold' }}>YIGO <span style={{ color: 'var(--green)' }}>AI</span></div>
         <div style={{ color: 'var(--muted)', fontSize: 10, letterSpacing: 2, marginBottom: 24, textTransform: 'uppercase', fontFamily: 'var(--font-sans)' }}>Enter Security PIN</div>
         <div className="pin-dots">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className={`pin-dot ${i < input.length ? 'filled' : ''} ${err ? 'err' : ''}`} />
+             <div key={i} className={`pin-dot ${i < input.length ? 'filled' : ''} ${err ? 'err' : ''}`} />
           ))}
         </div>
       </div>
