@@ -87,6 +87,10 @@ jobs:
         working-directory: yigo-desktop
         run: npx cap sync android
 
+      - name: Make Gradle Executable
+        working-directory: yigo-desktop/android
+        run: chmod +x gradlew
+
       - name: Build APK
         working-directory: yigo-desktop/android
         run: ./gradlew assembleDebug
@@ -121,10 +125,10 @@ jobs:
         working-directory: yigo-desktop
         run: npx cap sync ios
 
-      - name: Build Xcode Workspace
+      - name: Build Xcode Project
         working-directory: yigo-desktop/ios/App
         run: |
-          xcodebuild -workspace App.xcworkspace -scheme App -sdk iphoneos -configuration Debug -derivedDataPath build CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO clean build
+          xcodebuild -project App.xcodeproj -scheme App -sdk iphoneos -configuration Debug -derivedDataPath build CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO clean build
 
       - name: Package IPA
         working-directory: yigo-desktop/ios/App
