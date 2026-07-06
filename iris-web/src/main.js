@@ -393,11 +393,12 @@ function downloadPage() {
           <h3 style="font-family: 'Cinzel Decorative', serif;">${title}</h3>
           <p style="margin-bottom: 2rem;">${text}</p>
           <div style="display: flex; gap: 10px; flex-direction: column;">
-            <a href="https://drive.google.com/file/d/1q7fimtduT3NbiCHEl3IIClqJWL5Ks0Wn/view?usp=drive_link" class="download-pill" style="width: 100%; display: block; text-align: center; text-decoration: none;" target="_blank">Download for Windows (.exe)</a>
-            <a href="https://github.com/lucky638718/YIGOAI/actions" class="download-pill" style="width: 100%; display: block; text-align: center; text-decoration: none; background: transparent; border: 1px solid var(--green); color: var(--green);" target="_blank">Download for Mac OS (.dmg)</a>
-            <a href="https://github.com/lucky638718/YIGOAI/actions" class="download-pill" style="width: 100%; display: block; text-align: center; text-decoration: none; background: transparent; border: 1px solid var(--green); color: var(--green);" target="_blank">Download for Android (.apk)</a>
+            <a href="https://drive.google.com/file/d/1k1SCBf8y229Asm1dExty47fY9Ie0ueW-/view?usp=sharing" class="download-pill" style="width: 100%; display: block; text-align: center; text-decoration: none;" target="_blank">Download for Windows (.exe)</a>
+            <a href="https://drive.google.com/file/d/1KcFQEkw4No2EtcO-49ylmLhkCpCwC9eH/view?usp=sharing" class="download-pill" style="width: 100%; display: block; text-align: center; text-decoration: none;" target="_blank">Download for Mac OS (.dmg)</a>
+            <a href="https://drive.google.com/file/d/1fqil1ymDgq3xzxZbYKapqvQuU1mk26YX/view?usp=sharing" class="download-pill" style="width: 100%; display: block; text-align: center; text-decoration: none;" target="_blank">Download for Android (.apk)</a>
+            <a href="https://drive.google.com/file/d/15H5RUXh6StEr0D645zlldPp4wPkTUPjx/view?usp=sharing" class="download-pill" style="width: 100%; display: block; text-align: center; text-decoration: none;" target="_blank">Download for iOS (.ipa)</a>
           </div>
-          <p style="font-size: 0.8rem; color: var(--muted); margin-top: 15px; text-align: center;">Mac & Android links point to GitHub Actions Auto-Builds</p>
+          <p style="font-size: 0.8rem; color: var(--muted); margin-top: 15px; text-align: center;">Official packages hosted securely on Google Drive</p>
         </article>
       `).join('')}
     </section>
